@@ -1,1 +1,3 @@
 sphinx
+twine
+wheel
