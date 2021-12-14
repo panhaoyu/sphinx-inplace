@@ -40,7 +40,7 @@ class RstGenerator(object):
     """
 
     def __init__(self):
-        self.env = Environment(loader=PackageLoader('pyminer_devutils', 'doc/template'))
+        self.env = Environment(loader=PackageLoader('sphinx_inplace', 'template'))
         self.module_template = self.env.get_template('module.rst_t')
         self.package_template = self.env.get_template('package.rst_t')
 

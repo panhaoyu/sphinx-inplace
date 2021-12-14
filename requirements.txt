@@ -1,3 +1,7 @@
+# Production requirements
 sphinx
+
+# Develpment requirements
+recommonmark
 twine
 wheel

@@ -30,6 +30,11 @@ However, if python structure changed, developers have to update ``*.doc`` file s
 
 This tool do not need ``apidoc`` , and all the doc will automatically generated from python code.
 
+Usage
+---------------
+
+Please see the demo directory for more information.
+
 Tips
 ---------------
 
