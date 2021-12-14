@@ -42,11 +42,11 @@ def main():
     # )]
     # node = PythonFileTreeNode(py_dir, exclude_dir)
     # generator.generate_python_package_files(node, rst_dir, 'sphinx_inplace')
-
+    output_dir = path.join(path.dirname(__file__), 'build/html')
     app = Sphinx(
         srcdir=rst_root_dir,
         confdir=rst_root_dir,
-        outdir=path.join(path.dirname(__file__), 'build/html'),
+        outdir=output_dir,
         doctreedir=path.join(path.dirname(__file__), 'build/doctrees'),
         buildername='html',
         confoverrides=dict(),
@@ -60,6 +60,8 @@ def main():
         # parallel=multiprocessing.cpu_count(),
         keep_going=True)
     app.build()
+
+    os.system(f'ghp-import -m "build doc" -n -p -r origin -b gh-pages {output_dir}')
 
 
 if __name__ == '__main__':

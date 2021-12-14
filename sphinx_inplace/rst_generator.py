@@ -39,8 +39,13 @@ class RstGenerator(object):
 
     """
 
-    def __init__(self):
-        self.env = Environment(loader=PackageLoader('sphinx_inplace', 'template'))
+    def __init__(self, env: Environment = None):
+        """``Rst`` 生成配置
+
+        Args:
+            env: jinja environment
+        """
+        self.env = Environment(loader=PackageLoader('sphinx_inplace', 'template')) if env is None else env
         self.module_template = self.env.get_template('module.rst_t')
         self.package_template = self.env.get_template('package.rst_t')
 

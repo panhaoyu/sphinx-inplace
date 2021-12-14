@@ -70,7 +70,7 @@ html_theme = "sphinx_rtd_theme"
 html_static_path = ['_static']
 
 # The homepage will be rendered independently.
-# html_additional_pages = {'index': 'index.html'}
+html_additional_pages = {'index': 'index.html'}
 
 # Change the name of the generated home page for fear that it will cause interruption.
 master_doc = 'contents'
