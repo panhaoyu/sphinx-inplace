@@ -6,7 +6,8 @@ Sphinx Inplace Documentation
 .. toctree::
     :maxdepth: 2
 
-    Main <sphinx_inplace/index.rst>
+    Usage <usage/index.rst>
+    API Documentation <sphinx_inplace/index.rst>
     Contribution <contribute/index.rst>
 
 Modules
