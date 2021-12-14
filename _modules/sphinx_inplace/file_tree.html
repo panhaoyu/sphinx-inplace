@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sphinx_inplace.file_tree &mdash; Sphinx Inplace  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../contents.html" class="icon icon-home"> Sphinx Inplace
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/index.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../sphinx_inplace/index.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contribute/index.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../contents.html">Sphinx Inplace</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>sphinx_inplace.file_tree</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sphinx_inplace.file_tree</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">fnmatch</span> <span class="kn">import</span> <span class="n">fnmatch</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">cached_property</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="FileTreeNode"><a class="viewcode-back" href="../../sphinx_inplace/file_tree.html#sphinx_inplace.file_tree.FileTreeNode">[docs]</a><span class="k">class</span> <span class="nc">FileTreeNode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    本类用于识别Python文件结构。</span>
+
+<span class="sd">    获取文件树，并排除用户指定过滤的部分。</span>
+
+<span class="sd">        关于文件结构的过滤功能都写在了这个文件夹里，包括以下内容：</span>
+
+<span class="sd">        #. 对于非 ``python package`` 的部分全部跳过；</span>
+<span class="sd">        #. 跳过由 ``.`` 和 ``_`` 开头的文件和文件夹，不过保留 ``__*__`` 格式的文件和文件夹；</span>
+<span class="sd">        #. 跳过 ``__pycache__`` 文件夹；</span>
+<span class="sd">        #. 跳过用户指定要排除的文件夹。</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SUFFIXES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">,</span> <span class="s1">&#39;.pyx&#39;</span><span class="p">,</span> <span class="s1">&#39;.pyw&#39;</span><span class="p">)</span>
+    <span class="n">CORE_NAME</span> <span class="o">=</span> <span class="s1">&#39;__init__&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">exclude</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        根据指定的模式对文件夹进行解析，其递归的结果就是文件树。</span>
+
+<span class="sd">        将文件夹分为以下内容：</span>
+
+<span class="sd">        ================ =================================== ======================</span>
+<span class="sd">          类别             标准                                以Python为例的解释</span>
+<span class="sd">        ================ =================================== ======================</span>
+<span class="sd">          核心文件         后缀名为 ``.suffix`` 的文件         Python模块</span>
+<span class="sd">          非核心文件       后缀名不为 ``.suffix`` 的文件       其他文件</span>
+<span class="sd">          核心文件夹       包含 ``core.suffix`` 的文件夹       Python包</span>
+<span class="sd">          非核心文件夹     不包含 ``core.suffix`` 的文件夹     其他文件夹</span>
+<span class="sd">        ================ =================================== ======================</span>
+
+<span class="sd">        这四部分将分别采用不同的方式进行处理。</span>
+
+<span class="sd">        有一些额外的点需要说明，（这里仅以python文件结构为例）：</span>
+
+<span class="sd">        #. __init__.py 将不会显示在核心文件和非核心文件中；</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            directory: 需要计算文件树的文件夹。</span>
+<span class="sd">            exclude: 需要排除的模式，采用标准库的fnmatch进行匹配。</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            整理后的文件树</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directory</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exclude_patterns</span> <span class="o">=</span> <span class="n">exclude</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">filtered_sub_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;定义基本的基于用户的 ``exclude`` 参数的过滤器&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>  <span class="c1"># 这里要采用复制，因为遍历过程的原位删除会改变其遍历过程</span>
+            <span class="c1"># 删去用户指定排除的文件和文件夹</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">fnmatch</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">pattern</span><span class="p">)</span> <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">exclude_patterns</span><span class="p">):</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                <span class="k">continue</span>
+        <span class="c1"># 由于其他的路径都是从这里导出的，在这里进行一次排序，别的位置就不需要排序了</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">sub_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;子文件的路径列表，包括核心文件、其他文件及索引文件。&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">child</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_sub_paths</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">child</span><span class="p">)]</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">sub_core_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;核心子文件的路径列表。&quot;&quot;&quot;</span>
+        <span class="c1"># 判断后缀是否是核心文件的后缀</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_files</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUFFIXES</span><span class="p">]</span>
+        <span class="c1"># 判断基本名是否不是基本名</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">result</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">p</span><span class="p">)[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CORE_NAME</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">sub_other_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 判断后缀是否是核心文件的后缀</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">file</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_files</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUFFIXES</span><span class="p">]</span>
+        <span class="c1"># 判断基本名是否不是基本名</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">result</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">p</span><span class="p">)[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CORE_NAME</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">sub_directories</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;FileTreeNode&#39;</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;子文件夹，包括核心文件夹和其他文件夹&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">FileTreeNode</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">exclude_patterns</span><span class="p">)</span> <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filtered_sub_paths</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">child</span><span class="p">)]</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">sub_core_directories</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;FileTreeNode&#39;</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;子包&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_directories</span> <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">is_core_directory</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">sub_other_directories</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="s1">&#39;FileTreeNode&#39;</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;其他文件夹&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_directories</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">d</span><span class="o">.</span><span class="n">is_core_directory</span><span class="p">]</span>
+
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">is_core_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;是否是核心包&quot;&quot;&quot;</span>
+        <span class="c1"># 取删去文件夹后的基本名</span>
+        <span class="n">sub_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_files</span><span class="p">]</span>
+        <span class="c1"># 判断是否包含索引文件</span>
+        <span class="k">for</span> <span class="n">suffix</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUFFIXES</span><span class="p">:</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">CORE_NAME</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span> <span class="ow">in</span> <span class="n">sub_files</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="PythonFileTreeNode"><a class="viewcode-back" href="../../sphinx_inplace/file_tree.html#sphinx_inplace.file_tree.PythonFileTreeNode">[docs]</a><span class="k">class</span> <span class="nc">PythonFileTreeNode</span><span class="p">(</span><span class="n">FileTreeNode</span><span class="p">):</span>
+    <span class="nd">@cached_property</span>
+    <span class="k">def</span> <span class="nf">filtered_sub_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;定义针对Python的过滤器&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">PythonFileTreeNode</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">filtered_sub_paths</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">file_path</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>  <span class="c1"># 这里要采用复制，因为遍历过程的原位删除会改变其遍历过程</span>
+            <span class="n">dir_name</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+            <span class="n">base_name</span><span class="p">,</span> <span class="n">ext_name</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+            <span class="c1"># 删去由 ``.`` 和 ``_`` 开头的文件和文件夹，不过对于 ``__*__`` 格式的不进行操作</span>
+            <span class="k">if</span> <span class="n">base_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">base_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">base_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">)):</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># 删去 ``__pycache__`` 文件夹</span>
+            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="ow">and</span> <span class="n">base_name</span> <span class="o">==</span> <span class="s1">&#39;__pycache__&#39;</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                <span class="k">continue</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="RstFileTreeNode"><a class="viewcode-back" href="../../sphinx_inplace/file_tree.html#sphinx_inplace.file_tree.RstFileTreeNode">[docs]</a><span class="k">class</span> <span class="nc">RstFileTreeNode</span><span class="p">(</span><span class="n">FileTreeNode</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    针对 `.rst` 文件结构的过滤器，用于对生成后的文档结构进行识别。</span>
+
+<span class="sd">    主要是用于增量更新的过程中，需要判断哪些文件是无用的需要删除的。</span>
+
+<span class="sd">    本类实现了对 ``.rst`` 文件结构的过滤，可以用于配合 ``PythonFileTreeNode`` 找出这些需要被删除的文件。</span>
+
+<span class="sd">    这个类暂时没有派上用场。</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">SUFFIXES</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;.md&#39;</span><span class="p">,</span> <span class="s1">&#39;.rst&#39;</span><span class="p">)</span>
+    <span class="n">CORE_NAME</span> <span class="o">=</span> <span class="s1">&#39;index&#39;</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Haoyu Pan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sphinx_inplace.rst_generator &mdash; Sphinx Inplace  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contribution" href="../contribute/index.html" />
+    <link rel="prev" title="sphinx_inplace.file_tree" href="file_tree.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../contents.html" class="icon icon-home"> Sphinx Inplace
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="__main__.html">sphinx_inplace.__main__</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_tree.html">sphinx_inplace.file_tree</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sphinx_inplace.rst_generator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute/index.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../contents.html">Sphinx Inplace</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">sphinx_inplace</a> &raquo;</li>
+      <li>sphinx_inplace.rst_generator</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/sphinx_inplace/rst_generator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sphinx_inplace.rst_generator">
+<span id="sphinx-inplace-rst-generator"></span><h1>sphinx_inplace.rst_generator<a class="headerlink" href="#module-sphinx_inplace.rst_generator" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="sphinx_inplace.rst_generator.RstGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RstGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">jinja2.environment.Environment</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sphinx_inplace/rst_generator.html#RstGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.rst_generator.RstGenerator" title="Permalink to this definition"></a></dt>
+<dd><p>根据 <code class="docutils literal notranslate"><span class="pre">python</span></code> 文件结构生成 <code class="docutils literal notranslate"><span class="pre">rst</span></code> 文件结构。</p>
+<ol class="arabic simple">
+<li><p>对于不存在的文件，直接生成；</p></li>
+<li><p>对于已存在的文件，判断是否更新，如果更新则覆写，否则不改变，以免触发 <code class="docutils literal notranslate"><span class="pre">sphinx</span></code> 的更新机制；</p></li>
+<li><p>对于多余的文件，删除。</p></li>
+</ol>
+<p>本方法首先根据 <code class="docutils literal notranslate"><span class="pre">python</span></code> 文件结构生成 <code class="docutils literal notranslate"><span class="pre">rst</span></code> 文件结构，
+然后再将其余文件进行拷贝。
+因此，如果您本方法生成的 <code class="docutils literal notranslate"><span class="pre">*.rst</span></code> 不满意的话，可以采用与 <code class="docutils literal notranslate"><span class="pre">python</span></code> 文件同名但不同后缀的文件覆写自动生成的文件。</p>
+<p>Examples：</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">package</span>
+  <span class="o">|-</span> <span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+  <span class="o">|-</span> <span class="fm">__init__</span><span class="o">.</span><span class="n">rst</span>
+</pre></div>
+</div>
+<p>则 <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> 的内容会被弃用，而 <code class="docutils literal notranslate"><span class="pre">__init__.rst</span></code> 的内容会被拷贝过去。</p>
+</div></blockquote>
+<p class="rubric">Notes</p>
+<p>本程序旨在对文档进行增量更新，目前的方案是整体删除然后再进行构建。
+这是一个非常低效的方案，应当判断是否需要更新，如果需要更新的话再进行重新复制。</p>
+<p><code class="docutils literal notranslate"><span class="pre">Rst</span></code> 生成配置</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>env</strong> – jinja environment</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="sphinx_inplace.rst_generator.RstGenerator.generate_python_index_file">
+<span class="sig-name descname"><span class="pre">generate_python_index_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_tree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="file_tree.html#sphinx_inplace.file_tree.PythonFileTreeNode" title="sphinx_inplace.file_tree.PythonFileTreeNode"><span class="pre">sphinx_inplace.file_tree.PythonFileTreeNode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/sphinx_inplace/rst_generator.html#RstGenerator.generate_python_index_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.rst_generator.RstGenerator.generate_python_index_file" title="Permalink to this definition"></a></dt>
+<dd><p>根据Python的__init__.py生成包的索引文件</p>
+<p># 将 <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> 进行单独处理
+# 区别于其他的模块， <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> 相当于是包的主页，因此采用了包的模板，而非模块的模板。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_tree</strong> – 源文件夹的文件树节点。</p></li>
+<li><p><strong>dst_dir</strong> – 目标文件夹路径，不包括 <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> 文件名。</p></li>
+<li><p><strong>pkg_name</strong> – 包名，用于进行 <code class="docutils literal notranslate"><span class="pre">autodoc</span></code> 的 <code class="docutils literal notranslate"><span class="pre">import</span></code>。</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>生成的文件的路径。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sphinx_inplace.rst_generator.RstGenerator.generate_python_module_files">
+<span class="sig-name descname"><span class="pre">generate_python_module_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_tree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="file_tree.html#sphinx_inplace.file_tree.PythonFileTreeNode" title="sphinx_inplace.file_tree.PythonFileTreeNode"><span class="pre">sphinx_inplace.file_tree.PythonFileTreeNode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/sphinx_inplace/rst_generator.html#RstGenerator.generate_python_module_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.rst_generator.RstGenerator.generate_python_module_files" title="Permalink to this definition"></a></dt>
+<dd><p>生成一个目录下的所有python模块对应的rst文件。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_tree</strong> – 源文件夹的文件树节点。</p></li>
+<li><p><strong>dst_dir</strong> – 目标文件夹路径，不包括 <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> 文件名。</p></li>
+<li><p><strong>pkg_name</strong> – 包名，用于进行 <code class="docutils literal notranslate"><span class="pre">autodoc</span></code> 的 <code class="docutils literal notranslate"><span class="pre">import</span></code>。</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>这里不包括 <code class="docutils literal notranslate"><span class="pre">__init__.py</span></code> ，因为它们是单独生成的。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>生成的文件路径。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sphinx_inplace.rst_generator.RstGenerator.generate_asset_files">
+<span class="sig-name descname"><span class="pre">generate_asset_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_tree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="file_tree.html#sphinx_inplace.file_tree.PythonFileTreeNode" title="sphinx_inplace.file_tree.PythonFileTreeNode"><span class="pre">sphinx_inplace.file_tree.PythonFileTreeNode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/sphinx_inplace/rst_generator.html#RstGenerator.generate_asset_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.rst_generator.RstGenerator.generate_asset_files" title="Permalink to this definition"></a></dt>
+<dd><p>生成除了 <code class="docutils literal notranslate"><span class="pre">*.py</span></code> 文件之外的资源文件。</p>
+<p>这个函数只是对文件的简单拷贝。</p>
+<p>这里的拷贝采用的是 <code class="docutils literal notranslate"><span class="pre">shutil.copy2</span></code> 进行的，这个函数可以同时拷贝文件的时间戳等信息，
+这样可以避免触发 <code class="docutils literal notranslate"><span class="pre">sphinx</span></code> 由于文件更新导致的重编译。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_tree</strong> – 源文件夹的文件树节点。</p></li>
+<li><p><strong>dst_dir</strong> – 目标文件夹路径，不包括 <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> 文件名。</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>生成的文件路径。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sphinx_inplace.rst_generator.RstGenerator.copy_if_update">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">copy_if_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sphinx_inplace/rst_generator.html#RstGenerator.copy_if_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.rst_generator.RstGenerator.copy_if_update" title="Permalink to this definition"></a></dt>
+<dd><p>这个函数是对于 <code class="docutils literal notranslate"><span class="pre">shutil.copy2</span></code> 的封装，如果文件无变化则不复制。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> – 源文件。</p></li>
+<li><p><strong>dst</strong> – 目标文件。</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sphinx_inplace.rst_generator.RstGenerator.sync_directory">
+<span class="sig-name descname"><span class="pre">sync_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sphinx_inplace/rst_generator.html#RstGenerator.sync_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.rst_generator.RstGenerator.sync_directory" title="Permalink to this definition"></a></dt>
+<dd><p>递归地同步一个文件夹。</p>
+<p>同步为完全同步，如有更新的文件则创建，如有多余的文件则删除。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_dir</strong> – 源文件夹。</p></li>
+<li><p><strong>dst_dir</strong> – 新文件夹。</p></li>
+<li><p><strong>rm</strong> – 是否删除多余的文件及文件夹。</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sphinx_inplace.rst_generator.RstGenerator.generate_asset_directoreis">
+<span class="sig-name descname"><span class="pre">generate_asset_directoreis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_tree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="file_tree.html#sphinx_inplace.file_tree.PythonFileTreeNode" title="sphinx_inplace.file_tree.PythonFileTreeNode"><span class="pre">sphinx_inplace.file_tree.PythonFileTreeNode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/sphinx_inplace/rst_generator.html#RstGenerator.generate_asset_directoreis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.rst_generator.RstGenerator.generate_asset_directoreis" title="Permalink to this definition"></a></dt>
+<dd><p>生成除了 <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">package</span></code> 文件夹之外的资源文件夹。</p>
+<p>这个函数只是对文件夹的简单拷贝。</p>
+<p>这里的拷贝采用的是 <code class="docutils literal notranslate"><span class="pre">shutil.copy2</span></code> 进行的，这个函数可以同时拷贝文件的时间戳等信息，
+这样可以避免触发 <code class="docutils literal notranslate"><span class="pre">sphinx</span></code> 由于文件更新导致的重编译。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_tree</strong> – 源文件夹的文件树节点。</p></li>
+<li><p><strong>dst_sub_dir</strong> – 目标文件夹路径，不包括 <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> 文件名。</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>生成的文件夹列表。</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sphinx_inplace.rst_generator.RstGenerator.generate_python_package_files">
+<span class="sig-name descname"><span class="pre">generate_python_package_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tree</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="file_tree.html#sphinx_inplace.file_tree.PythonFileTreeNode" title="sphinx_inplace.file_tree.PythonFileTreeNode"><span class="pre">sphinx_inplace.file_tree.PythonFileTreeNode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/sphinx_inplace/rst_generator.html#RstGenerator.generate_python_package_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.rst_generator.RstGenerator.generate_python_package_files" title="Permalink to this definition"></a></dt>
+<dd><p>基于一个 <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">package</span></code> 生成相应的文件夹。</p>
+<p>这个函数可以理解为是这个类的主函数，
+它将递归对子包进行生成。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tree</strong> – 源文件，是一个 <code class="docutils literal notranslate"><span class="pre">Node</span></code> 节点。</p></li>
+<li><p><strong>dst_dir</strong> – 生成的 <code class="docutils literal notranslate"><span class="pre">rst</span></code> 文件结构。</p></li>
+<li><p><strong>pkg_name</strong> – 用于写入模版中的 <code class="docutils literal notranslate"><span class="pre">package_name</span></code> 。</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>暂无返回值</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>本模块区别于 <code class="docutils literal notranslate"><span class="pre">shpinx-apidoc</span></code> 的将所有文件放在一个文件夹的方案，
+采用了层级的方案进行 <code class="docutils literal notranslate"><span class="pre">rst</span></code> 文件结构的组织。
+这样生成的内容更直观，且可以包含非 <code class="docutils literal notranslate"><span class="pre">*.py</span></code> 文件。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>创建的文件夹路径。</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="file_tree.html" class="btn btn-neutral float-left" title="sphinx_inplace.file_tree" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../contribute/index.html" class="btn btn-neutral float-right" title="Contribution" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Haoyu Pan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

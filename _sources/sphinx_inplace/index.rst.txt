@@ -1,0 +1,15 @@
+==============================================================================
+sphinx_inplace
+==============================================================================
+
+.. toctree::
+   :maxdepth: 2
+
+
+   __main__.rst
+   file_tree.rst
+   rst_generator.rst
+
+.. automodule:: sphinx_inplace
+    :members:
+    :undoc-members:

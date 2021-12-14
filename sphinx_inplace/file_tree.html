@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en-US" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sphinx_inplace.file_tree &mdash; Sphinx Inplace  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sphinx_inplace.rst_generator" href="rst_generator.html" />
+    <link rel="prev" title="sphinx_inplace.__main__" href="__main__.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../contents.html" class="icon icon-home"> Sphinx Inplace
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage/index.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="__main__.html">sphinx_inplace.__main__</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">sphinx_inplace.file_tree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rst_generator.html">sphinx_inplace.rst_generator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute/index.html">Contribution</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../contents.html">Sphinx Inplace</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../contents.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">sphinx_inplace</a> &raquo;</li>
+      <li>sphinx_inplace.file_tree</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/sphinx_inplace/file_tree.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-sphinx_inplace.file_tree">
+<span id="sphinx-inplace-file-tree"></span><h1>sphinx_inplace.file_tree<a class="headerlink" href="#module-sphinx_inplace.file_tree" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FileTreeNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sphinx_inplace/file_tree.html#FileTreeNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode" title="Permalink to this definition"></a></dt>
+<dd><p>本类用于识别Python文件结构。</p>
+<p>获取文件树，并排除用户指定过滤的部分。</p>
+<blockquote>
+<div><p>关于文件结构的过滤功能都写在了这个文件夹里，包括以下内容：</p>
+<ol class="arabic simple">
+<li><p>对于非 <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">package</span></code> 的部分全部跳过；</p></li>
+<li><p>跳过由 <code class="docutils literal notranslate"><span class="pre">.</span></code> 和 <code class="docutils literal notranslate"><span class="pre">_</span></code> 开头的文件和文件夹，不过保留 <code class="docutils literal notranslate"><span class="pre">__*__</span></code> 格式的文件和文件夹；</p></li>
+<li><p>跳过 <code class="docutils literal notranslate"><span class="pre">__pycache__</span></code> 文件夹；</p></li>
+<li><p>跳过用户指定要排除的文件夹。</p></li>
+</ol>
+</div></blockquote>
+<p>根据指定的模式对文件夹进行解析，其递归的结果就是文件树。</p>
+<p>将文件夹分为以下内容：</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 48%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>类别</p></th>
+<th class="head"><p>标准</p></th>
+<th class="head"><p>以Python为例的解释</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>核心文件</p></td>
+<td><p>后缀名为 <code class="docutils literal notranslate"><span class="pre">.suffix</span></code> 的文件</p></td>
+<td><p>Python模块</p></td>
+</tr>
+<tr class="row-odd"><td><p>非核心文件</p></td>
+<td><p>后缀名不为 <code class="docutils literal notranslate"><span class="pre">.suffix</span></code> 的文件</p></td>
+<td><p>其他文件</p></td>
+</tr>
+<tr class="row-even"><td><p>核心文件夹</p></td>
+<td><p>包含 <code class="docutils literal notranslate"><span class="pre">core.suffix</span></code> 的文件夹</p></td>
+<td><p>Python包</p></td>
+</tr>
+<tr class="row-odd"><td><p>非核心文件夹</p></td>
+<td><p>不包含 <code class="docutils literal notranslate"><span class="pre">core.suffix</span></code> 的文件夹</p></td>
+<td><p>其他文件夹</p></td>
+</tr>
+</tbody>
+</table>
+<p>这四部分将分别采用不同的方式进行处理。</p>
+<p>有一些额外的点需要说明，（这里仅以python文件结构为例）：</p>
+<ol class="arabic simple">
+<li><p>__init__.py 将不会显示在核心文件和非核心文件中；</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directory</strong> – 需要计算文件树的文件夹。</p></li>
+<li><p><strong>exclude</strong> – 需要排除的模式，采用标准库的fnmatch进行匹配。</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>整理后的文件树</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode.SUFFIXES">
+<span class="sig-name descname"><span class="pre">SUFFIXES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('.py',</span> <span class="pre">'.pyx',</span> <span class="pre">'.pyw')</span></em><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode.SUFFIXES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode.CORE_NAME">
+<span class="sig-name descname"><span class="pre">CORE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'__init__'</span></em><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode.CORE_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode.filtered_sub_paths">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">filtered_sub_paths</span></span><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode.filtered_sub_paths" title="Permalink to this definition"></a></dt>
+<dd><p>定义基本的基于用户的 <code class="docutils literal notranslate"><span class="pre">exclude</span></code> 参数的过滤器</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode.sub_files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sub_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode.sub_files" title="Permalink to this definition"></a></dt>
+<dd><p>子文件的路径列表，包括核心文件、其他文件及索引文件。</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode.sub_core_files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sub_core_files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode.sub_core_files" title="Permalink to this definition"></a></dt>
+<dd><p>核心子文件的路径列表。</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode.sub_other_files">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sub_other_files</span></span><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode.sub_other_files" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode.sub_directories">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sub_directories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sphinx_inplace.file_tree.FileTreeNode" title="sphinx_inplace.file_tree.FileTreeNode"><span class="pre">sphinx_inplace.file_tree.FileTreeNode</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode.sub_directories" title="Permalink to this definition"></a></dt>
+<dd><p>子文件夹，包括核心文件夹和其他文件夹</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode.sub_core_directories">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sub_core_directories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sphinx_inplace.file_tree.FileTreeNode" title="sphinx_inplace.file_tree.FileTreeNode"><span class="pre">sphinx_inplace.file_tree.FileTreeNode</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode.sub_core_directories" title="Permalink to this definition"></a></dt>
+<dd><p>子包</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode.sub_other_directories">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sub_other_directories</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sphinx_inplace.file_tree.FileTreeNode" title="sphinx_inplace.file_tree.FileTreeNode"><span class="pre">sphinx_inplace.file_tree.FileTreeNode</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode.sub_other_directories" title="Permalink to this definition"></a></dt>
+<dd><p>其他文件夹</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.FileTreeNode.is_core_directory">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_core_directory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sphinx_inplace.file_tree.FileTreeNode.is_core_directory" title="Permalink to this definition"></a></dt>
+<dd><p>是否是核心包</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.PythonFileTreeNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PythonFileTreeNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sphinx_inplace/file_tree.html#PythonFileTreeNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.file_tree.PythonFileTreeNode" title="Permalink to this definition"></a></dt>
+<dd><p>根据指定的模式对文件夹进行解析，其递归的结果就是文件树。</p>
+<p>将文件夹分为以下内容：</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 48%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>类别</p></th>
+<th class="head"><p>标准</p></th>
+<th class="head"><p>以Python为例的解释</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>核心文件</p></td>
+<td><p>后缀名为 <code class="docutils literal notranslate"><span class="pre">.suffix</span></code> 的文件</p></td>
+<td><p>Python模块</p></td>
+</tr>
+<tr class="row-odd"><td><p>非核心文件</p></td>
+<td><p>后缀名不为 <code class="docutils literal notranslate"><span class="pre">.suffix</span></code> 的文件</p></td>
+<td><p>其他文件</p></td>
+</tr>
+<tr class="row-even"><td><p>核心文件夹</p></td>
+<td><p>包含 <code class="docutils literal notranslate"><span class="pre">core.suffix</span></code> 的文件夹</p></td>
+<td><p>Python包</p></td>
+</tr>
+<tr class="row-odd"><td><p>非核心文件夹</p></td>
+<td><p>不包含 <code class="docutils literal notranslate"><span class="pre">core.suffix</span></code> 的文件夹</p></td>
+<td><p>其他文件夹</p></td>
+</tr>
+</tbody>
+</table>
+<p>这四部分将分别采用不同的方式进行处理。</p>
+<p>有一些额外的点需要说明，（这里仅以python文件结构为例）：</p>
+<ol class="arabic simple">
+<li><p>__init__.py 将不会显示在核心文件和非核心文件中；</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directory</strong> – 需要计算文件树的文件夹。</p></li>
+<li><p><strong>exclude</strong> – 需要排除的模式，采用标准库的fnmatch进行匹配。</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>整理后的文件树</p>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.PythonFileTreeNode.filtered_sub_paths">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">filtered_sub_paths</span></span><a class="headerlink" href="#sphinx_inplace.file_tree.PythonFileTreeNode.filtered_sub_paths" title="Permalink to this definition"></a></dt>
+<dd><p>定义针对Python的过滤器</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.RstFileTreeNode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RstFileTreeNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sphinx_inplace/file_tree.html#RstFileTreeNode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sphinx_inplace.file_tree.RstFileTreeNode" title="Permalink to this definition"></a></dt>
+<dd><p>针对 <cite>.rst</cite> 文件结构的过滤器，用于对生成后的文档结构进行识别。</p>
+<p>主要是用于增量更新的过程中，需要判断哪些文件是无用的需要删除的。</p>
+<p>本类实现了对 <code class="docutils literal notranslate"><span class="pre">.rst</span></code> 文件结构的过滤，可以用于配合 <code class="docutils literal notranslate"><span class="pre">PythonFileTreeNode</span></code> 找出这些需要被删除的文件。</p>
+<p>这个类暂时没有派上用场。</p>
+<p>根据指定的模式对文件夹进行解析，其递归的结果就是文件树。</p>
+<p>将文件夹分为以下内容：</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 48%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>类别</p></th>
+<th class="head"><p>标准</p></th>
+<th class="head"><p>以Python为例的解释</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>核心文件</p></td>
+<td><p>后缀名为 <code class="docutils literal notranslate"><span class="pre">.suffix</span></code> 的文件</p></td>
+<td><p>Python模块</p></td>
+</tr>
+<tr class="row-odd"><td><p>非核心文件</p></td>
+<td><p>后缀名不为 <code class="docutils literal notranslate"><span class="pre">.suffix</span></code> 的文件</p></td>
+<td><p>其他文件</p></td>
+</tr>
+<tr class="row-even"><td><p>核心文件夹</p></td>
+<td><p>包含 <code class="docutils literal notranslate"><span class="pre">core.suffix</span></code> 的文件夹</p></td>
+<td><p>Python包</p></td>
+</tr>
+<tr class="row-odd"><td><p>非核心文件夹</p></td>
+<td><p>不包含 <code class="docutils literal notranslate"><span class="pre">core.suffix</span></code> 的文件夹</p></td>
+<td><p>其他文件夹</p></td>
+</tr>
+</tbody>
+</table>
+<p>这四部分将分别采用不同的方式进行处理。</p>
+<p>有一些额外的点需要说明，（这里仅以python文件结构为例）：</p>
+<ol class="arabic simple">
+<li><p>__init__.py 将不会显示在核心文件和非核心文件中；</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directory</strong> – 需要计算文件树的文件夹。</p></li>
+<li><p><strong>exclude</strong> – 需要排除的模式，采用标准库的fnmatch进行匹配。</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>整理后的文件树</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.RstFileTreeNode.SUFFIXES">
+<span class="sig-name descname"><span class="pre">SUFFIXES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('.md',</span> <span class="pre">'.rst')</span></em><a class="headerlink" href="#sphinx_inplace.file_tree.RstFileTreeNode.SUFFIXES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sphinx_inplace.file_tree.RstFileTreeNode.CORE_NAME">
+<span class="sig-name descname"><span class="pre">CORE_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'index'</span></em><a class="headerlink" href="#sphinx_inplace.file_tree.RstFileTreeNode.CORE_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="__main__.html" class="btn btn-neutral float-left" title="sphinx_inplace.__main__" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="rst_generator.html" class="btn btn-neutral float-right" title="sphinx_inplace.rst_generator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Haoyu Pan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
